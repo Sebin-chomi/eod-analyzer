@@ -87,8 +87,10 @@ def write_eod_state(trade_date: str, state: Mapping[str, object]) -> None:
     """Write EOD_STATE.v0 for a single date."""
     year, month, day = trade_date.split("-")
     output_path = f"history/{year}/{month}/{day}/eod_state.json"
-    _ = (output_path, state)
-    raise NotImplementedError("EOD Analyzer I/O is not implemented.")
+    path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as handle:
+        json.dump(state, handle, ensure_ascii=False, indent=2)
 
 
 def analyze_date(trade_date: str) -> None:
