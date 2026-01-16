@@ -44,6 +44,7 @@ def analyze_eod(eod_candle: Candle) -> Mapping[str, object]:
     high = float(candle["high"])
     low = float(candle["low"])
     close = float(candle["close"])
+    volume = float(candle["volume"])
 
     if close > open_:
         trend = "UP"
@@ -63,6 +64,8 @@ def analyze_eod(eod_candle: Candle) -> Mapping[str, object]:
         else:
             close_position = "MID"
 
+    daily_range_pct = None if close == 0 else (high - low) / close
+
     return {
         "price_structure": {
             "range": {
@@ -77,8 +80,12 @@ def analyze_eod(eod_candle: Candle) -> Mapping[str, object]:
             "trade_date": trade_date,
             "analysis_time": f"{trade_date}T00:00:00Z",
         },
-        "volatility": None,
-        "volume": None,
+        "volatility": {
+            "daily_range_pct": daily_range_pct,
+        },
+        "volume": {
+            "total_volume": volume,
+        },
         "market_behavior": None,
     }
 
