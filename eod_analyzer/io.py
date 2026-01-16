@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from datetime import date as date_type, timedelta
+import json
 import sys
 from typing import Mapping
 
@@ -17,8 +18,20 @@ def load_eod_for_date(trade_date: str) -> Candle:
     """Load raw EOD candle data for a single date."""
     year, month, day = trade_date.split("-")
     input_path = f"input/{year}/{month}/{day}/eod_candles.json"
-    _ = input_path
-    raise NotImplementedError("EOD Analyzer I/O is not implemented.")
+    with Path(input_path).open("r", encoding="utf-8") as handle:
+        data = json.load(handle)
+    if not isinstance(data, list):
+        raise ValueError("EOD candles must be a list")
+    required_keys = {"trade_date", "open", "high", "low", "close", "volume"}
+    for item in data:
+        if not isinstance(item, Mapping):
+            raise ValueError("Each candle must be a mapping")
+        missing = required_keys - set(item.keys())
+        if missing:
+            raise ValueError(f"Missing keys: {sorted(missing)}")
+        if item.get("trade_date") != trade_date:
+            raise ValueError("trade_date mismatch")
+    return data
 
 
 def analyze_eod(eod_candle: Candle) -> Mapping[str, object]:
