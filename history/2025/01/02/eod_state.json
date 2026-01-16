@@ -8,15 +8,24 @@
     "close_position": "NEAR_HIGH"
   },
   "meta": {
-    "version": "EOD_STATE_v0",
+    "version": "EOD_STATE_v1",
     "trade_date": "2025-01-02",
-    "analysis_time": "2025-01-02T00:00:00Z"
+    "analysis_time": "2025-01-02T00:00:00Z",
+    "schema_revision": 1
   },
   "volatility": {
-    "daily_range_pct": 0.1388888888888889
+    "daily_range_pct": 0.1388888888888889,
+    "body_pct": 0.07407407407407407,
+    "upper_wick_pct": 0.018518518518518517,
+    "lower_wick_pct": 0.046296296296296294
   },
   "volume": {
     "total_volume": 123456.0
+  },
+  "integrity": {
+    "source": "collector_v0",
+    "input_validated": true,
+    "validation_errors": []
   },
   "market_behavior": null
 }
